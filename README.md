@@ -34,3 +34,7 @@ The project uses [TypeScript](https://typescriptlang.org) to fully take advantag
 |-- tslint.json
 `-- yarn.lock
 ```
+
+## Getting started
+
+Before you continure, ensure you have [Node.js](https://nodejs.org/en/download/) and [Yarn Pkg](https://yarnpkg.com/getting-started/install), an alternative to [npm](https://www.npmjs.com/get-npm). But both should work just right.
