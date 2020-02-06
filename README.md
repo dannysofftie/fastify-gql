@@ -5,31 +5,38 @@ The project uses [TypeScript](https://typescriptlang.org) to fully take advantag
 ## Folder structure
 
 ```
+.
+|-- datamodel.graphql
+|-- dist
+|   |-- bin
+|   |-- index.js
+|   |-- index.js.map
+|   |-- middlewares
+|   |-- mutations
+|   |-- prisma
+|   |-- resolvers
+|   |-- schemas
+|   `-- @types
+|-- docker-compose.yml
+|-- graphql
+|   |-- mutations.graphql
+|   |-- queries.graphql
+|   `-- schema.graphql
 |-- jest.config.js
 |-- package.json
-|-- prisma
+|-- prisma.yml
 |-- README.md
 |-- src
 |   |-- bin
-|   |   `-- www.ts
 |   |-- index.ts
 |   |-- middlewares
-|   |   `-- index.ts
 |   |-- mutations
-|   |   |-- Authors.ts
-|   |   |-- index.ts
-|   |   `-- Posts.ts
-|   |-- mutations.graphql
-|   |-- queries.graphql
+|   |-- prisma
 |   |-- resolvers
-|   |   |-- Authors.ts
-|   |   |-- index.ts
-|   |   `-- Posts.ts
 |   |-- schemas
-|   |   `-- index.ts
-|   |-- schemas.graphql
 |   `-- @types
-|       `-- index.ts
+|-- __tests__
+|   `-- index.jest.ts
 |-- tsconfig.json
 |-- tslint.json
 `-- yarn.lock
