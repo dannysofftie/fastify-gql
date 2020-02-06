@@ -1,0 +1,28 @@
+type Author @db(name: "authors") {
+    id: ID! @id
+    firstName: String
+    lastName: String
+    """
+    the list of Posts by this author
+    """
+    posts: [Post!]!
+    createdAt: DateTime! @createdAt
+    updatedAt: DateTime! @updatedAt
+}
+
+type Post @db(name: "posts") {
+    id: ID! @id
+    title: String
+    author: Author! @relation(link: INLINE)
+    votes: Int
+    comments: [Comment!]!
+    createdAt: DateTime! @createdAt
+    updatedAt: DateTime! @updatedAt
+}
+
+type Comment @embedded {
+    id: ID! @id
+    text: String
+    createdAt: DateTime! @createdAt
+    updatedAt: DateTime! @updatedAt
+}
