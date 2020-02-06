@@ -1,0 +1,7 @@
+"""
+All queries defined in one place
+"""
+type Query {
+    retrievePosts: [Post]
+    findAuthorById(id: Int!): Author
+}

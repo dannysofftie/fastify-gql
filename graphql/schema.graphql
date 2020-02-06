@@ -1,0 +1,30 @@
+scalar Date
+
+type Author {
+    id: ID!
+    firstName: String
+    lastName: String
+    """
+    the list of Posts by this author
+    """
+    posts: [Post!]!
+    createdAt: Date!
+    updatedAt: Date!
+}
+
+type Post {
+    id: ID!
+    title: String
+    author: Author!
+    votes: Int
+    comments: [Comment!]!
+    createdAt: Date!
+    updatedAt: Date!
+}
+
+type Comment {
+    id: ID!
+    text: String
+    createdAt: Date!
+    updatedAt: Date!
+}
