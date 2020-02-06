@@ -1,0 +1,11 @@
+datamodel:
+    - datamodel.graphql
+databaseType: document
+hooks:
+    post-deploy:
+        - prisma generate
+secret: 234r679804urfhnc232
+endpoint: http://127.0.0.1:4466
+generate:
+    - generator: typescript-client
+      output: ./src/prisma
