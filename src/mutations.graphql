@@ -1,9 +1,0 @@
-"""
-All mutations defined in one place
-"""
-type Mutation {
-    """
-    Upvote a post, specified by post id. Returns updated document
-    """
-    upvotePostById(postId: Int!): Post
-}

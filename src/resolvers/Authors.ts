@@ -1,11 +1,9 @@
-import { AuthenticationError } from 'apollo-server-fastify';
+import { prisma } from '../prisma';
 
-export function findAuthorById(params: IQueryParams) {
-    //
-    console.log(params);
-    throw new AuthenticationError('Could not verify user token. Unprevilidged');
+export function findAuthorById(_, args, context, info) {
+    return prisma.author({ id: args['id'] });
 }
 
 export function retrievePosts(args: IQueryParams) {
-    //
+    return [{}];
 }
