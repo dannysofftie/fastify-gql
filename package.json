@@ -9,7 +9,9 @@
         "test": "test",
         "build": "npm run clean && tsc -b --listEmittedFiles",
         "clean": "tsc -b --clean",
-        "debug": "node --inspect -r ts-node/register src/index.ts"
+        "debug": "node --inspect -r ts-node/register src/index.ts",
+        "start:prisma": "docker-compose up -d",
+        "deploy:models": "prisma deploy"
     },
     "repository": {
         "type": "git",
