@@ -4,7 +4,7 @@ databaseType: document
 hooks:
     post-deploy:
         - prisma generate
-secret: 234r679804urfhnc232
+secret: PRISMA_MANAGEMENT_API_SECRET
 endpoint: http://127.0.0.1:4466
 generate:
     - generator: typescript-client

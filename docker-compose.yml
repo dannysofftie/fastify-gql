@@ -8,8 +8,8 @@ services:
         environment:
             PRISMA_CONFIG: |
                 port: 4466
-                managementApiSecret: 234r679804urfhnc232
+                managementApiSecret: ${PRISMA_MANAGEMENT_API_SECRET}
                 databases:
                   default:
                     connector: mongo
-                    uri: mongodb+srv://prisma-admin:dgsyg6t3ybjncec423tgr@prisma-cluster-ppnyn.mongodb.net/prisma-database?retryWrites=true&w=majority
+                    uri: ${MONGO_CONNECTION_STRING}
