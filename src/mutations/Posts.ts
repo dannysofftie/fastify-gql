@@ -7,8 +7,10 @@ export function deletePostById() {
     //
 }
 
-export function createNewPost() {
-    //
+export function createNewPost(root, args, ctx, info) {
+    console.log(args['post']['title']);
+
+    return { title: args['post']['title'] };
 }
 
 export function upvotePostById() {

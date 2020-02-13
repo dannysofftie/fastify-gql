@@ -1,10 +1,13 @@
+import * as apollo from 'apollo-server-fastify';
 import * as fastify from 'fastify';
 import * as cors from 'fastify-cors';
-import * as apollo from 'apollo-server-fastify';
-import { typeDefs } from '../schemas';
-import resolversAndMutations from '../resolvers';
-import * as servestatic from 'serve-static';
 import { join } from 'path';
+import * as servestatic from 'serve-static';
+import mqtt from '../libraries/MQTT';
+import utils from '../utils';
+import configs from '../configs';
+import { prisma } from '../prisma';
+import schema from '../schemas';
 
 export default class App {
     private app: fastify.FastifyInstance;
@@ -17,13 +20,36 @@ export default class App {
         this.app = fastify({ ignoreTrailingSlash: true, logger: { level: 'warn' } });
         this.port = (5000 || process.env.PORT) as number;
 
+        this.configs();
+
         this.apolloServer = new apollo.ApolloServer({
-            context: req => ({ ...req, app: this.app }),
-            typeDefs,
-            resolvers: resolversAndMutations,
+            context: ({ req }) => {
+                const header = req['headers']['authorization'] as string;
+
+                const obj = { user: null, prisma, app: this.app };
+
+                if (!header) {
+                    return obj;
+                }
+
+                const token = header.split('Bearer ')[1];
+
+                if (!token) {
+                    return obj;
+                }
+
+                obj['user'] = this.app.utils.jwt.verify(token);
+
+                if (!token) {
+                    return obj;
+                }
+
+                return obj;
+            },
+            schema,
         });
 
-        this.configs();
+        this.app.register(this.apolloServer.createHandler());
     }
 
     public async start() {
@@ -38,7 +64,12 @@ export default class App {
 
     private configs() {
         this.app.register(cors, { preflight: true, credentials: true });
-        this.app.register(this.apolloServer.createHandler());
+
+        this.app.register(configs);
+
+        this.app.register(utils);
+
+        this.app.register(mqtt);
 
         this.app.use((_req, res, callback: (err?: Error) => void) => {
             res.setHeader('Surrogate-Control', 'no-store');

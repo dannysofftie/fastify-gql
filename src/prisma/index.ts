@@ -1154,6 +1154,6 @@ export const Prisma = makePrismaClientClass<ClientConstructor<Prisma>>({
   typeDefs,
   models,
   endpoint: `http://127.0.0.1:4466`,
-  secret: `234r679804urfhnc232`
+  secret: `PRISMA_MANAGEMENT_API_SECRET`
 });
 export const prisma = new Prisma();
