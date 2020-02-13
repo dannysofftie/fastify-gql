@@ -28,3 +28,7 @@ type Comment {
     createdAt: Date!
     updatedAt: Date!
 }
+
+input InputPost {
+    title: String
+}

@@ -6,4 +6,19 @@ type Mutation {
     Upvote a post, specified by post id. Returns updated document
     """
     upvotePostById(postId: Int!): Post
+
+    """
+    Create a new post
+    """
+    createNewPost(post: InputPost!): Post!
+
+    """
+    Dlete a post, specified by post id.
+    """
+    deletePostById(postId: Int!): Boolean
+
+    """
+    Update a post, specified by post id. Returns updated document
+    """
+    updatePostById(id: InputPost!): Post!
 }
