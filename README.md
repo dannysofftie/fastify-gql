@@ -1,22 +1,16 @@
 # Quick start to API development with [Fastify](https://fastify.io) and [GraphQL](https://github.com/apollographql/apollo-server)
 
-The project uses [TypeScript](https://typescriptlang.org) to fully take advantage of intellisense and type checks
+The project uses [TypeScript](https://typescriptlang.org) to fully leverage on it's intellisense and type checks
 
 ## Folder structure
 
 ```
-.
+|-- certs
+|   |-- jwtRS256.key
+|   |-- jwtRS256.key.pub
+|   |-- mqtt-certificate.crt
+|   `-- mqtt-certificate.key
 |-- datamodel.graphql
-|-- dist
-|   |-- bin
-|   |-- index.js
-|   |-- index.js.map
-|   |-- middlewares
-|   |-- mutations
-|   |-- prisma
-|   |-- resolvers
-|   |-- schemas
-|   `-- @types
 |-- docker-compose.yml
 |-- graphql
 |   |-- mutations.graphql
@@ -28,13 +22,35 @@ The project uses [TypeScript](https://typescriptlang.org) to fully take advantag
 |-- README.md
 |-- src
 |   |-- bin
+|   |   `-- www.ts
+|   |-- configs
+|   |   `-- index.ts
 |   |-- index.ts
+|   |-- libraries
+|   |   `-- MQTT.ts
 |   |-- middlewares
+|   |   `-- index.ts
 |   |-- mutations
+|   |   |-- Authors.ts
+|   |   |-- index.ts
+|   |   `-- Posts.ts
+|   |-- permissions
+|   |   `-- index.ts
 |   |-- prisma
+|   |   |-- index.ts
+|   |   `-- prisma-schema.ts
 |   |-- resolvers
+|   |   |-- Authors.ts
+|   |   |-- index.ts
+|   |   `-- Posts.ts
 |   |-- schemas
-|   `-- @types
+|   |   `-- index.ts
+|   |-- @types
+|   |   `-- index.ts
+|   `-- utils
+|       |-- Email.ts
+|       |-- index.ts
+|       `-- Token.ts
 |-- __tests__
 |   `-- index.jest.ts
 |-- tsconfig.json
