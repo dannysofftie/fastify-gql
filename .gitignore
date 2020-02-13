@@ -5,3 +5,5 @@ test
 *.log
 
 dist
+
+yarn.lock
