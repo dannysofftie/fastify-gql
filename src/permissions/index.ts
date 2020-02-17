@@ -19,5 +19,6 @@ export default shield({
 
             return true;
         }),
+        // other query permissions here
     },
 });

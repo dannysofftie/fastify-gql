@@ -2,7 +2,7 @@ import { gql, makeExecutableSchema } from 'apollo-server-fastify';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import mutationFunctions from '../mutations';
-import resolverFunctions from '../resolvers';
+import resolverFunctions from '../queries';
 import { applyMiddleware } from 'graphql-middleware';
 import permissions from '../permissions';
 

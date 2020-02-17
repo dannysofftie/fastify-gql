@@ -55,7 +55,6 @@
         "@types/mosca": "^2.8.2",
         "@types/node": "^13.7.0",
         "@types/nodemailer": "^6.4.0",
-        "graphqlgen": "^0.6.0-rc9",
         "jest": "^25.1.0",
         "ts-jest": "^25.2.0",
         "ts-node-dev": "^1.0.0-pre.44",
