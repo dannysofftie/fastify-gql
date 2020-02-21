@@ -6,7 +6,7 @@ import * as servestatic from 'serve-static';
 import mqtt from '../libraries/MQTT';
 import utils from '../utils';
 import configs from '../configs';
-import { prisma } from '../prisma';
+import { PrismaClient } from '@prisma/client';
 import schema from '../schemas';
 
 export default class App {
@@ -16,9 +16,13 @@ export default class App {
 
     private apolloServer: apollo.ApolloServer;
 
+    private prisma: PrismaClient;
+
     constructor() {
         this.app = fastify({ ignoreTrailingSlash: true, logger: { level: 'warn' } });
         this.port = (5000 || process.env.PORT) as number;
+
+        this.prisma = new PrismaClient();
 
         this.configs();
 
@@ -26,7 +30,7 @@ export default class App {
             context: ({ req }) => {
                 const header = req['headers']['authorization'] as string;
 
-                const obj = { user: null, prisma, app: this.app };
+                const obj = { user: null, prisma: this.prisma, app: this.app };
 
                 if (!header) {
                     return obj;
@@ -47,6 +51,7 @@ export default class App {
                 return obj;
             },
             schema,
+            formatError: this.app.utils.formatError,
         });
 
         this.app.register(this.apolloServer.createHandler());

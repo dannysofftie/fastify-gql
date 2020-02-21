@@ -1,9 +1,29 @@
-import { prisma } from '../prisma';
+import { IRequestContext } from '../@types';
 
-export function findAuthorById(_, args, context, info) {
-    return prisma.author({ id: args['id'] });
+/**
+ * Find author by id
+ *
+ * @export
+ * @param {*} _
+ * @param {*} args
+ * @param {IRequestContext} ctx
+ * @param {*} info
+ * @returns
+ */
+export async function findAuthorById(_: any, args: any, ctx: IRequestContext, info: any) {
+    return await ctx.prisma.author.findOne({ where: { id: args['id'] } });
 }
 
-export function retrievePosts(args) {
-    return [{}];
+/**
+ * Retrieve all posts
+ *
+ * @export
+ * @param {*} _
+ * @param {*} args
+ * @param {IRequestContext} ctx
+ * @param {*} info
+ * @returns
+ */
+export async function retrievePosts(_: any, args: any, ctx: IRequestContext, info: any) {
+    return await ctx.prisma.post.findMany();
 }

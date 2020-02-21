@@ -1,14 +1,14 @@
+import { PrismaClient } from '@prisma/client';
+import { FastifyInstance } from 'fastify';
 import { IncomingMessage, Server, ServerResponse } from 'http';
 import * as mosca from 'mosca';
 import { IConfigs } from '../configs';
 import { IUtils } from '../utils';
 import { IJWTPayload } from '../utils/Token';
-import { Prisma } from '../prisma';
-import { FastifyInstance } from 'fastify';
 
 export interface IRequestContext {
     user: IJWTPayload;
-    prisma: Prisma;
+    prisma: PrismaClient;
     app: FastifyInstance;
 }
 

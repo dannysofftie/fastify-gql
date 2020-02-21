@@ -1,18 +1,58 @@
-export function updatePostById() {
+import { IRequestContext } from '../@types';
+
+/**
+ * Update post by id
+ *
+ * @export
+ * @param {*} _
+ * @param {*} args
+ * @param {IRequestContext} ctx
+ * @param {*} info
+ * @returns
+ */
+export function updatePostById(_: any, args: any, ctx: IRequestContext, info: any) {
     //
     return {};
 }
 
-export function deletePostById() {
+/**
+ * Delete post by id
+ *
+ * @export
+ * @param {*} _
+ * @param {*} args
+ * @param {IRequestContext} ctx
+ * @param {*} info
+ */
+export function deletePostById(_: any, args: any, ctx: IRequestContext, info: any) {
     //
 }
 
-export function createNewPost(root, args, ctx, info) {
+/**
+ * Create a new post by id
+ *
+ * @export
+ * @param {*} _
+ * @param {*} args
+ * @param {IRequestContext} ctx
+ * @param {*} info
+ * @returns
+ */
+export function createNewPost(_: any, args: any, ctx: IRequestContext, info: any) {
     console.log(args['post']['title']);
 
     return { title: args['post']['title'] };
 }
 
-export function upvotePostById() {
+/**
+ * Update post by id
+ *
+ * @export
+ * @param {*} _
+ * @param {*} args
+ * @param {IRequestContext} ctx
+ * @param {*} info
+ */
+export function upvotePostById(_: any, args: any, ctx: IRequestContext, info: any) {
     //
 }

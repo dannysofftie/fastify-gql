@@ -4,7 +4,7 @@ import { join } from 'path';
 import mutationFunctions from '../mutations';
 import resolverFunctions from '../queries';
 import { applyMiddleware } from 'graphql-middleware';
-import permissions from '../permissions';
+import middlewares from '../middlewares';
 
 const schemas = readFileSync(join(__dirname, '..', '..', 'graphql', 'schema.graphql'), 'utf-8');
 const queries = readFileSync(join(__dirname, '..', '..', 'graphql', 'queries.graphql'), 'utf-8');
@@ -21,5 +21,5 @@ export default applyMiddleware(
         typeDefs,
         resolvers: { ...resolverFunctions, ...mutationFunctions },
     }),
-    permissions
+    middlewares
 );
