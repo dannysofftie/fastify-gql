@@ -1,22 +1,23 @@
+import { PrismaClient } from '@prisma/client';
 import * as apollo from 'apollo-server-fastify';
 import * as fastify from 'fastify';
 import * as cors from 'fastify-cors';
 import { join } from 'path';
 import * as servestatic from 'serve-static';
-import mqtt from '../libraries/MQTT';
-import utils from '../utils';
 import configs from '../configs';
-import { PrismaClient } from '@prisma/client';
+import libraries from '../libraries';
+import plugins from '../plugins';
+import { formatError } from '../plugins/Errors';
 import schema from '../schemas';
 
 export default class App {
-    private app: fastify.FastifyInstance;
+    public app: fastify.FastifyInstance;
 
     private port: number;
 
     private apolloServer: apollo.ApolloServer;
 
-    private prisma: PrismaClient;
+    public prisma: PrismaClient;
 
     constructor() {
         this.app = fastify({ ignoreTrailingSlash: true, logger: { level: 'warn' } });
@@ -42,7 +43,7 @@ export default class App {
                     return obj;
                 }
 
-                obj['user'] = this.app.utils.jwt.verify(token);
+                obj['user'] = this.app.plugins.jwt.verify(token);
 
                 if (!token) {
                     return obj;
@@ -51,7 +52,7 @@ export default class App {
                 return obj;
             },
             schema,
-            formatError: this.app.utils.formatError,
+            formatError,
         });
 
         this.app.register(this.apolloServer.createHandler());
@@ -72,9 +73,9 @@ export default class App {
 
         this.app.register(configs);
 
-        this.app.register(utils);
+        this.app.register(plugins);
 
-        this.app.register(mqtt);
+        this.app.register(libraries);
 
         this.app.use((_req, res, callback: (err?: Error) => void) => {
             res.setHeader('Surrogate-Control', 'no-store');

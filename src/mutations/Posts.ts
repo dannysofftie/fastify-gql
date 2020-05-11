@@ -1,4 +1,4 @@
-import { IRequestContext } from '../@types';
+import { IRequestContext } from 'fastify';
 
 /**
  * Update post by id

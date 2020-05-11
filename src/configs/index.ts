@@ -1,6 +1,6 @@
 import * as fp from 'fastify-plugin';
 import { config } from 'dotenv';
-import { IEmailConfigs } from '../utils/Email';
+import { IEmailConfigs } from '../plugins/Email';
 
 config();
 

@@ -3,20 +3,20 @@ import { IJWTUtils, JWTUtils } from './Token';
 import { IErrorNames, error, formatError } from './Errors';
 import { GraphQLError } from 'graphql';
 
-export interface IUtils {
+export interface IPlugins {
     jwt: IJWTUtils;
     error: IErrorNames;
     formatError(err: GraphQLError): Error;
 }
 
-const utils: IUtils = {
+const plugins: IPlugins = {
     jwt: JWTUtils,
     error,
     formatError,
 };
 
 export default fp((app, opts, done: (err?: Error) => void) => {
-    app.decorate('utils', utils);
+    app.decorate('plugins', plugins);
 
     // pass execution to the next middleware in stack
     done();

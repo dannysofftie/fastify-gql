@@ -1,6 +1,6 @@
 import { AuthenticationError } from 'apollo-server-fastify';
 import { rule, shield } from 'graphql-shield';
-import { IRequestContext } from '../@types';
+import { IRequestContext } from 'fastify';
 
 export default shield(
     {
@@ -12,7 +12,7 @@ export default shield(
                     throw new AuthenticationError('Unauthorized');
                 }
 
-                const data = await ctx.prisma.author.findMany({ include: { posts: { where: { author: { id: user.id } } } } });
+                const data = await ctx.prisma.author.findMany({ include: { posts: { where: { author: { email: user.email } } } } });
 
                 if (data) {
                     return true;

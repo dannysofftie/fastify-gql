@@ -9,7 +9,7 @@ export interface IEmailOptions {
     subject: string;
     fromtext: string;
     tocustomname: string;
-    attachments?: Array<{ filename: string; content: ReadStream }>;
+    attachments?: { filename: string; content: ReadStream }[];
 }
 
 export interface IEmailConfigs {
@@ -91,10 +91,7 @@ class Email {
      *     }>}
      * @memberof Email
      */
-    private attachments: Array<{
-        filename: string;
-        content: ReadStream;
-    }>;
+    private attachments: { filename: string; content: ReadStream }[];
 
     /**
      * Email configurations

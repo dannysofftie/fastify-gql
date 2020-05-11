@@ -1,3 +1,9 @@
 import App from './bin/www';
 
-new App().start();
+const fastify = new App();
+
+export const prisma = fastify.prisma;
+
+export const app = fastify.app;
+
+fastify.start();

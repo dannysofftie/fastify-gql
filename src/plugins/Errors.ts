@@ -74,5 +74,5 @@ export const formatError = (err: GraphQLError) => {
         return errorType[err['message']];
     }
 
-    return err;
+    return err['message'];
 };
