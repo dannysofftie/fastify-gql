@@ -1,6 +1,6 @@
 import { AuthenticationError } from 'apollo-server-fastify';
-import { rule, shield } from 'graphql-shield';
 import { IRequestContext } from 'fastify';
+import { rule, shield } from 'graphql-shield';
 
 export default shield(
     {

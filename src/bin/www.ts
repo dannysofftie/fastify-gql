@@ -1,35 +1,38 @@
 import { PrismaClient } from '@prisma/client';
-import * as apollo from 'apollo-server-fastify';
-import * as fastify from 'fastify';
-import * as cors from 'fastify-cors';
+import { ApolloServer } from 'apollo-server-fastify';
+import fastify, { FastifyInstance } from 'fastify';
+import cors from 'fastify-cors';
+import servestatic from 'fastify-static';
 import { join } from 'path';
-import * as servestatic from 'serve-static';
 import configs from '../configs';
-import libraries from '../libraries';
+import mqtt from '../libraries/Mqtt';
 import plugins from '../plugins';
 import { formatError } from '../plugins/Errors';
 import schema from '../schemas';
+import autoload from '../plugins/Autoload';
+import models from '../models';
 
 export default class App {
-    public app: fastify.FastifyInstance;
+    public app: FastifyInstance;
 
-    private port: number;
+    private port: number | string;
 
-    private apolloServer: apollo.ApolloServer;
+    private apolloServer: ApolloServer;
 
     public prisma: PrismaClient;
 
     constructor() {
         this.app = fastify({ ignoreTrailingSlash: true, logger: { level: 'warn' } });
-        this.port = (5000 || process.env.PORT) as number;
+
+        this.port = 5000 || process.env.PORT;
 
         this.prisma = new PrismaClient();
 
         this.configs();
 
-        this.apolloServer = new apollo.ApolloServer({
-            context: ({ req }) => {
-                const header = req['headers']['authorization'] as string;
+        this.apolloServer = new ApolloServer({
+            context: ({ request: { raw } }) => {
+                const header = `${raw['headers']['authorization']}`;
 
                 const obj = { user: null, prisma: this.prisma, app: this.app };
 
@@ -53,6 +56,7 @@ export default class App {
             },
             schema,
             formatError,
+            introspection: process.env.NODE_ENV !== 'production',
         });
 
         this.app.register(this.apolloServer.createHandler());
@@ -61,7 +65,7 @@ export default class App {
     public async start() {
         await this.app.listen(this.port as number, '0.0.0.0').catch(console.log);
 
-        console.log('Server listening on port', this.app.server.address());
+        console.log('🚀 Server listening on port', this.app.server.address());
 
         process.on('uncaughtException', console.error);
 
@@ -75,18 +79,12 @@ export default class App {
 
         this.app.register(plugins);
 
-        this.app.register(libraries);
+        this.app.register(autoload, { dir: join(__dirname, '..', 'services') });
 
-        this.app.use((_req, res, callback: (err?: Error) => void) => {
-            res.setHeader('Surrogate-Control', 'no-store');
-            res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-            res.setHeader('Pragma', 'no-cache');
-            res.setHeader('Expires', '0');
+        this.app.register(mqtt);
 
-            callback();
-        });
+        this.app.register(models);
 
-        // @ts-ignore
-        this.app.use('/public', servestatic(join(__dirname, '..', 'public')));
+        this.app.register(servestatic, { root: join(__dirname, '..', '..', 'public'), wildcard: false, prefix: '/public' });
     }
 }

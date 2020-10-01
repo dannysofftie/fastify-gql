@@ -1,6 +1,9 @@
 import * as aedes from 'aedes';
 import * as persist from 'aedes-persistence';
+import { FastifyInstance } from 'fastify';
+import fp, { PluginOptions } from 'fastify-plugin';
 import { createServer, Server } from 'net';
+import * as ws from 'websocket-stream';
 
 export interface IMQTTUtilities {
     broker: aedes.Aedes;
@@ -8,47 +11,56 @@ export interface IMQTTUtilities {
     server: Server;
 }
 
-const broker = aedes.Server({ persistence: persist(), concurrency: 200, connectTimeout: 40000 });
+export default fp((app: FastifyInstance, opts: PluginOptions, done: (err?: Error) => void) => {
+    const broker = aedes.Server({ persistence: persist(), concurrency: 200, connectTimeout: 40000 });
 
-const server = createServer();
+    const server = createServer();
 
-server.listen(process.env.MQTT_PORT, () => console.log(`🚀 MQTT broker listening on %s`, process.env.MQTT_PORT));
+    server.listen(process.env.MQTT_PORT, () => console.log(`🚀 MQTT broker listening on %s`, process.env.MQTT_PORT));
 
-const clients: string[] = [];
+    // @ts-ignore
+    ws.createServer({ server: app.server }, broker.handle);
 
-/**
- * For internal use only,
- *
- * Use this to monitor registration of new clients to mqtt's registration pool.
- * We won't act on this event when server successfully delivers message to agents, since we're monitoring
- * event `ack` above.
- */
-broker.on('publish', (packet) => {
-    const topic: string = packet['topic'];
+    const clients: string[] = [];
 
-    // this is a system internal message
-    if (/\$SYS/.test(topic)) {
-        const clientId = Buffer.from(packet['payload'] as string, 'base64').toString();
+    /**
+     * For internal use only,
+     *
+     * Use this to monitor registration of new clients to mqtt's registration pool.
+     * We won't act on this event when server successfully delivers message to agents, since we're monitoring
+     * event `ack` above.
+     */
+    broker.on('publish', (packet) => {
+        const topic: string = packet['topic'];
 
-        const agentIndex = clients.findIndex((a) => a.toString() === clientId.toString());
+        // this is a system internal message
+        if (/\$SYS/.test(topic)) {
+            const clientId = Buffer.from(packet['payload'] as any, 'base64').toString();
 
-        switch (true) {
-            case /disconnect/.test(topic):
-                clients.splice(agentIndex, 1);
+            const agentIndex = clients.findIndex((a) => a.toString() === clientId.toString());
 
-                break;
+            switch (true) {
+                case /disconnect/.test(topic):
+                    clients.splice(agentIndex, 1);
 
-            case /new/.test(topic):
-                clients.push(clientId);
+                    break;
 
-                break;
+                case /new/.test(topic):
+                    clients.push(clientId);
 
-            default:
-                // ignore system internal heartbeat messages
+                    break;
 
-                break;
+                default:
+                    // ignore system internal heartbeat messages
+
+                    break;
+            }
         }
-    }
-});
+    });
 
-export default { broker, clients, server };
+    const utils = { broker, clients, server };
+
+    app.decorate('mqtt', utils);
+
+    done();
+});
