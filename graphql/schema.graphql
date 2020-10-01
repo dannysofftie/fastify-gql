@@ -1,12 +1,11 @@
 scalar Date
+scalar JSON
+scalar Number
 
 type Author {
     id: ID!
     firstName: String
     lastName: String
-    """
-    the list of Posts by this author
-    """
     posts: [Post!]!
     createdAt: Date!
     updatedAt: Date!
